@@ -20,29 +20,28 @@ public class Messenger implements Runnable {
     public void run() {
         while(!Thread.interrupted()) {
 
-            synchronized (dock) { //Only one person in at a time
-                try {
-                    //Is my first resource available? Wait until it is.
-                    dock.getIsAvailable().get(required.get(0)).acquire();
+            try {
+                //Is my first resource available? Wait until it is.
+                dock.getIsAvailable().get(required.get(0)).acquire();
 
-                    //Is my second resource available? Check and continue.
-                    if (dock.getIsAvailable().get(required.get(1)).tryAcquire()) {
+                //Is my second resource available? Check and continue.
+                if (dock.getIsAvailable().get(required.get(1)).tryAcquire()) {
 
-                        //Take the resources
-                        dock.getResources().clear();
-                        try {
-                            //Let the miner know that their resources are delivered.
-                            resources.acquire();
-                        } catch (InterruptedException ie) {
-                            // TODO: 4/20/2019 ?
-                        }
-                    } else { //If second resource is not available, let others use the first.
-                        dock.getIsAvailable().get(required.get(0)).release();
+                    //Take the resources
+                    dock.getResources().clear();
+                    try {
+                        //Let the miner know that their resources are delivered.
+                        resources.acquire();
+                    } catch (InterruptedException ie) {
+                        // TODO: 4/20/2019 ?
                     }
-                } catch(InterruptedException ie) {
-                    // TODO: 4/21/2019
+                } else { //If second resource is not available, let others use the first.
+                    dock.getIsAvailable().get(required.get(0)).release();
                 }
+            } catch(InterruptedException ie) {
+                // TODO: 4/21/2019
             }
+
         }
     }
 
