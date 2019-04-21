@@ -1,6 +1,5 @@
 package messaging;
 
-import mining.Miner;
 import mining.Supplies;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public class Messenger implements Runnable {
     private List<Supplies> required;
     private Semaphore resources;
 
-    public Messenger(Docks dock, Miner miner, List<Supplies> required) {
+    public Messenger(Docks dock, List<Supplies> required) {
         this.dock = dock;
         this.required = required;
         this.resources = new Semaphore(1);
@@ -20,14 +19,28 @@ public class Messenger implements Runnable {
 
     public void run() {
         while(!Thread.interrupted()) {
-            synchronized (dock) {
-                if (dock.getResources().containsAll(required)) {
-                    dock.getResources().clear();
-                    try {
-                        resources.acquire();
-                    } catch(InterruptedException ie) {
-                        // TODO: 4/20/2019 ?
+
+            synchronized (dock) { //Only one person in at a time
+                try {
+                    //Is my first resource available? Wait until it is.
+                    dock.getIsAvailable().get(required.get(0)).acquire();
+
+                    //Is my second resource available? Check and continue.
+                    if (dock.getIsAvailable().get(required.get(1)).tryAcquire()) {
+
+                        //Take the resources
+                        dock.getResources().clear();
+                        try {
+                            //Let the miner know that their resources are delivered.
+                            resources.acquire();
+                        } catch (InterruptedException ie) {
+                            // TODO: 4/20/2019 ?
+                        }
+                    } else { //If second resource is not available, let others use the first.
+                        dock.getIsAvailable().get(required.get(0)).release();
                     }
+                } catch(InterruptedException ie) {
+                    // TODO: 4/21/2019
                 }
             }
         }

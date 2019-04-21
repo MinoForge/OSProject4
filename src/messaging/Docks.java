@@ -21,16 +21,16 @@ public class Docks {
     }
 
     public synchronized void deliver(Supplies type){
-        resources.add(type);
+        resources.add(type); //Add the given supply to the list of currently available supplies
 
-        try {
-            isAvailable.get(type).acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        isAvailable.get(type).release(); //Allow others to see that the resource is available
     }
 
     public List<Supplies> getResources() {
         return resources;
+    }
+
+    public Map<Supplies, Semaphore> getIsAvailable() {
+        return isAvailable;
     }
 }

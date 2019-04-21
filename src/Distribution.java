@@ -25,9 +25,9 @@ public class Distribution {
                     } catch(FileNotFoundException fnfe) {
                         System.out.println("File could not be opened:  log.txt");
                     }
+                } else if(args[1].toUpperCase().charAt(0) != 'F') {
+                    usage(2);
                 }
-            } else if(args[1].toUpperCase().charAt(0) != 'F') {
-                usage(2);
             }
         } else {
             usage(3);
