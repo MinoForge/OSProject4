@@ -2,8 +2,7 @@ import java.io.*;
 
 public class Distribution {
     public static void main(String[] args){
-        long timeout = 0;
-
+        long timeout;
         if(args.length > 0 && args.length < 3) {
             boolean badNumber = false;
             try {
@@ -15,7 +14,7 @@ public class Distribution {
                 badNumber = true;
             }
             if(badNumber) {
-                usage();
+                usage(1);
             }
 
             if(args.length > 1) {
@@ -27,16 +26,20 @@ public class Distribution {
                         System.out.println("File could not be opened:  log.txt");
                     }
                 }
+            } else if(args[1].toUpperCase().charAt(0) != 'F') {
+                usage(2);
             }
         } else {
-            usage();
+            usage(3);
         }
 
-        // TODO: 4/21/2019 Actually do things. 
+        // TODO: 4/21/2019 Actually do things.
+        System.exit(0);
     }
 
-    public static void usage() {
+    private static void usage(int status) {
         System.out.println("USAGE: java Distribution <runtime> [Log to file? T/F]");
+        System.exit(status);
     }
 
 }
