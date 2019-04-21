@@ -1,3 +1,5 @@
+package messaging;
+
 import mining.Supplies;
 
 import java.util.*;
@@ -26,5 +28,9 @@ public class Docks {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Supplies> getResources() {
+        return resources;
     }
 }

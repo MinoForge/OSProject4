@@ -1,5 +1,7 @@
 package mining;
 
+import messaging.Messenger;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Miner implements Runnable {

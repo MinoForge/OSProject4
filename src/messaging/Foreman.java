@@ -1,5 +1,6 @@
-// import??  
+package messaging;// import??
 
+import messaging.Docks;
 import mining.Supplies;
 
 import java.util.Random;
@@ -23,7 +24,7 @@ public class Foreman implements Runnable {
         /* TODO: 
          * Pick two supplies randomly, the two supplies will always be different from each other.
          * Signal the 'docks' indicating supplies are ready for EACH type of supply chosen.
-         * Foreman will NOT send any more supplies of any kind until the two picked have been
+         * messaging.Foreman will NOT send any more supplies of any kind until the two picked have been
          * consumed.
          */
         while(running) {
@@ -49,7 +50,7 @@ public class Foreman implements Runnable {
                     // wait for the dock to be empty
                     theDock.wait();
                 } catch (InterruptedException e) {
-                    System.out.println("Foreman was interrupted, goodbye.");
+                    System.out.println("messaging.Foreman was interrupted, goodbye.");
 
                 }
             }
