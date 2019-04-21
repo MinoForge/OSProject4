@@ -1,14 +1,11 @@
 package mining;
 
-public enum Miners {
-    BREAD("Bread"),
-    BOLOGNA("Bologna"),
-    CHEESE("Cheese");
+public class Miners {
 
-    private String type;
+    private Supplies material;
 
     Miners(String type) {
-        this.type = type;
+        this.material = Supplies.valueOf(type);
     }
 
 
