@@ -1,24 +1,32 @@
+import mining.Supplies;
+
+import java.util.*;
+import java.util.concurrent.Semaphore;
+
 public class Docks {
 
-    private Object breadMiners;
-    private Object bolognaMiners;
-    private Object cheeseMiners;
+    private Map<Supplies, Semaphore> isAvailable;
+
+    private List<Supplies> resources;
 
     public Docks() {
-        this.breadMiners = new Object();
-        this.bolognaMiners = new Object();
-        this.cheeseMiners = new Object();
+        isAvailable = Collections.synchronizedMap(new HashMap<>());
+
+        for(Supplies supply : Supplies.values())
+            isAvailable.put(supply, new Semaphore(1, true));
+
+        this.resources = Collections.synchronizedList(new ArrayList<>(2));
     }
 
-    public Object getBreadMiners() {
-        return breadMiners;
-    }
+    public synchronized void deliver(Supplies type){
+        resources.add(type);
 
-    public Object getBolognaMiners() {
-        return bolognaMiners;
-    }
+        try {
+            isAvailable.get(type).acquire();
+        } catch (InterruptedException e) {
 
-    public Object getCheeseMiners() {
-        return cheeseMiners;
+        } finally {
+            isAvailable.get(type).release();
+        }
     }
 }
