@@ -24,9 +24,7 @@ public class Docks {
         try {
             isAvailable.get(type).acquire();
         } catch (InterruptedException e) {
-
-        } finally {
-            isAvailable.get(type).release();
+            e.printStackTrace();
         }
     }
 }
