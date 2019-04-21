@@ -7,9 +7,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Miner implements Runnable {
 
     private Supplies material;
+    private Messenger messenger;
 
-    Miner(String type) {
+    Miner(String type, Messenger messenger) {
         this.material = Supplies.valueOf(type);
+        this.messenger = messenger;
+
     }
 
     public void run() {
@@ -24,6 +27,7 @@ public class Miner implements Runnable {
 
         try {
             // sleep for 10s max
+            messenger.getResources().release();
             Thread.sleep(ThreadLocalRandom.current().nextInt(10000));
         } catch (InterruptedException e){
             // someone said stop, lets let the miners eat first.

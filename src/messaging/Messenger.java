@@ -9,19 +9,17 @@ import java.util.concurrent.Semaphore;
 public class Messenger implements Runnable {
 
     private Docks dock;
-    private Miner miner;
     private List<Supplies> required;
     private Semaphore resources;
-    private volatile boolean running;
 
     public Messenger(Docks dock, Miner miner, List<Supplies> required) {
         this.dock = dock;
-        this.miner = miner;
         this.required = required;
+        this.resources = new Semaphore(1);
     }
 
     public void run() {
-        while(running) {
+        while(!Thread.interrupted()) {
             synchronized (dock) {
                 if (dock.getResources().containsAll(required)) {
                     dock.getResources().clear();
