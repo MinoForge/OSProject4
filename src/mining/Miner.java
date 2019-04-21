@@ -1,10 +1,10 @@
 package mining;
 
-public class Miners {
+public class Miner {
 
     private Supplies material;
 
-    Miners(String type) {
+    Miner(String type) {
         this.material = Supplies.valueOf(type);
     }
 
