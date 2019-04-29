@@ -7,27 +7,23 @@ import java.util.concurrent.Semaphore;
 
 public class Docks {
 
-    private Map<Supplies, Semaphore> isAvailable;
+    public Map<Supplies, Semaphore> isAvailable;
 
-    private List<Supplies> resources;
+    public Map<Supplies, Semaphore> messengers;
+
+    public Semaphore needSupplies;
 
     public Docks() {
         isAvailable = Collections.synchronizedMap(new HashMap<>());
-
         for(Supplies supply : Supplies.values())
             isAvailable.put(supply, new Semaphore(1, true));
 
-        this.resources = Collections.synchronizedList(new ArrayList<>(2));
-    }
+        this.messengers = Collections.synchronizedMap(new HashMap<>());
+        for(Supplies supply : Supplies.values())
+            messengers.put(supply, new Semaphore(1, true));
 
-    public synchronized void deliver(Supplies type){
-        resources.add(type); //Add the given supply to the list of currently available supplies
+        this.needSupplies = new Semaphore(1, true);
 
-        isAvailable.get(type).release(); //Allow others to see that the resource is available
-    }
-
-    public List<Supplies> getResources() {
-        return resources;
     }
 
     public Map<Supplies, Semaphore> getIsAvailable() {

@@ -10,13 +10,13 @@ public class Foreman implements Runnable {
 
     private final Supplies[] types;
 
-    private final Docks theDock;
+    private Docks dock;
 
     private volatile boolean running;
 
     public Foreman(Docks docks) {
         this.types = Supplies.values();
-        theDock = docks;
+        dock = docks;
     }
 
     @Override
@@ -28,32 +28,30 @@ public class Foreman implements Runnable {
          * consumed.
          */
         while(running) {
+            try {
+                dock.needSupplies.acquire();
+            } catch (InterruptedException ie) {
 
+            }
+
+            // Get supplies
             Random threadRng = ThreadLocalRandom.current();
             int type1Index = threadRng.nextInt(types.length);
             // start at index 1, then go a random amount around in a loop, without making a full
             // loop
             int type2Index = (type1Index + threadRng.nextInt(types.length - 2) + 1) % types.length;
+
+            System.out.println("Dropping " + types[type1Index]);
+            System.out.flush();
             Supplies type1 = types[type1Index];
+
+            System.out.println("Dropping " + types[type2Index]);
+            System.out.flush();
             Supplies type2 = types[type2Index];
 
-            synchronized (theDock) {
-                // deliver to the dock
-                theDock.deliver(type1);
-                theDock.deliver(type2);
-                // wake the dock up and say I gave it something
-                theDock.notify();
-            }
-
-            synchronized (theDock) {
-                try {
-                    // wait for the dock to be empty
-                    theDock.wait();
-                } catch (InterruptedException e) {
-                    System.out.println("messaging.Foreman was interrupted, goodbye.");
-
-                }
-            }
+            // Make resources available at the docks
+            dock.isAvailable.get(type1).release();
+            dock.isAvailable.get(type2).release();
         }
 
 
