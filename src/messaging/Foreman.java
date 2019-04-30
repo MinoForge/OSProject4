@@ -1,6 +1,5 @@
-package messaging;// import??
+package messaging;
 
-import messaging.Docks;
 import mining.Supplies;
 
 import java.util.Random;
@@ -27,7 +26,7 @@ public class Foreman implements Runnable {
          * messaging.Foreman will NOT send any more supplies of any kind until the two picked have been
          * consumed.
          */
-        while(running) {
+        while(!Thread.interrupted()) {
             try {
                 dock.needSupplies.acquire();
             } catch (InterruptedException ie) {
@@ -41,12 +40,10 @@ public class Foreman implements Runnable {
             // loop
             int type2Index = (type1Index + threadRng.nextInt(types.length - 2) + 1) % types.length;
 
-            System.out.println("Dropping " + types[type1Index]);
-            System.out.flush();
+            System.out.printf("Dropping %s\n", types[type1Index]);
             Supplies type1 = types[type1Index];
 
-            System.out.println("Dropping " + types[type2Index]);
-            System.out.flush();
+            System.out.printf("Dropping %s\n", types[type2Index]);
             Supplies type2 = types[type2Index];
 
             // Make resources available at the docks

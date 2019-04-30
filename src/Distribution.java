@@ -40,6 +40,7 @@ public class Distribution {
             usage(3);
         }
 
+
         go(timeout);
         // TODO: 4/21/2019 Actually do things.
         System.exit(0);
@@ -49,6 +50,9 @@ public class Distribution {
         boolean runForever = true;
         if(timeout > 0) {
             runForever = false;
+            System.out.println("Running for " + timeout + " seconds:");
+        } else {
+            System.out.println("Running forever:");
         }
 
         Docks docks = new Docks();
@@ -65,6 +69,7 @@ public class Distribution {
             Supplies ownedSupply = resources.get(i);
 
             resources.remove(i);
+            System.out.println();
 
             threads.add(new Thread(new Miner(ownedSupply, docks)));
             threads.add(new Thread(new Messenger(resources, ownedSupply, docks)));

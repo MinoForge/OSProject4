@@ -10,11 +10,13 @@ public class Messenger implements Runnable {
     private Docks dock;
     private List<Supplies> required;
     private Semaphore resources;
+    private Supplies ready;
 
     public Messenger(List<Supplies> required, Supplies ready, Docks dock) {
         this.dock = dock;
         this.required = required;
         this.resources = dock.messengers.get(ready);
+        this.ready = ready;
     }
 
     public void run() {
@@ -23,12 +25,13 @@ public class Messenger implements Runnable {
 
             try {
                 //Is my first resource available? Wait until it is.
-                dock.getIsAvailable().get(required.get(count)).acquire();
+                dock.isAvailable.get(required.get(count)).acquire();
 
                 //Is my second resource available? Check and continue.
-                if (dock.getIsAvailable().get(required.get((count + 1) % required.size())).tryAcquire()) {
+                if (dock.isAvailable.get(required.get((count + 1) % required.size())).tryAcquire()) {
 
                     //Take the resources
+                    System.out.printf("%s messenger has obtained supplies.\n", ready);
                     try {
                         //Let the miner know that their resources are delivered.
                         resources.acquire();
@@ -37,7 +40,7 @@ public class Messenger implements Runnable {
                     }
                 } else { //If second resource is not available, let others use the first.
 
-                    dock.getIsAvailable().get(required.get(count)).release();
+                    dock.isAvailable.get(required.get(count)).release();
                     count = (count + 1) % required.size();
                 }
             } catch(InterruptedException ie) {

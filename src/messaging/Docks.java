@@ -16,7 +16,7 @@ public class Docks {
     public Docks() {
         isAvailable = Collections.synchronizedMap(new HashMap<>());
         for(Supplies supply : Supplies.values())
-            isAvailable.put(supply, new Semaphore(1, true));
+            isAvailable.put(supply, new Semaphore(0, true));
 
         this.messengers = Collections.synchronizedMap(new HashMap<>());
         for(Supplies supply : Supplies.values())
@@ -26,7 +26,7 @@ public class Docks {
 
     }
 
-    public Map<Supplies, Semaphore> getIsAvailable() {
-        return isAvailable;
-    }
+//    public Map<Supplies, Semaphore> getIsAvailable() {
+//        return isAvailable;
+//    }
 }

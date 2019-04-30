@@ -31,7 +31,7 @@ public class Miner implements Runnable {
             dock.needSupplies.release();
             dock.messengers.get(material).acquire();
 //            Thread.sleep(ThreadLocalRandom.current().nextInt(10000));
-            Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
+            Thread.sleep(ThreadLocalRandom.current().nextInt(10));
         } catch (InterruptedException e){
             // someone said stop, lets let the miners eat first.
             Thread.currentThread().interrupt();
