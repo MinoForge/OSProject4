@@ -6,7 +6,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Miner implements Runnable {
 
-    private static int BOUND = Integer.getInteger("miner.bound", 10);
+    private static final int BOUND = Integer.getInteger("miner.bound", 10);
+
+    private static final boolean SHOW_STATUS = !Boolean.getBoolean("miner.hide_status");
 
     private short id;
 
@@ -32,7 +34,8 @@ public class Miner implements Runnable {
     }
 
     private void makeSandwiches() throws InterruptedException {
-        System.out.printf("The %s miners want to eat.\n", material);
+        if(SHOW_STATUS)
+            System.out.printf("The %s miners want to eat.\n", material);
 
         dock.needSupplies.release();
         dock.messengers.get(material).acquire();
@@ -40,7 +43,8 @@ public class Miner implements Runnable {
     }
 
     private void eatSandwiches() throws InterruptedException {
-        System.out.printf("The %s miners are eating. Om nom nom.\n", material);
+        if(SHOW_STATUS)
+            System.out.printf("The %s miners are eating. Om nom nom.\n", material);
         Thread.sleep(ThreadLocalRandom.current().nextInt(BOUND));
     }
 
