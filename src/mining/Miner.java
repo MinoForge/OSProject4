@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Miner implements Runnable {
 
-    private static int BOUND = Integer.getInteger("miner.bound", 1000);
+    private static int BOUND = Integer.getInteger("miner.bound", 10);
 
     private short id;
 
