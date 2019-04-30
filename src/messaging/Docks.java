@@ -20,9 +20,9 @@ public class Docks {
 
         this.messengers = Collections.synchronizedMap(new HashMap<>());
         for(Supplies supply : Supplies.values())
-            messengers.put(supply, new Semaphore(1, true));
+            messengers.put(supply, new Semaphore(0, true));
 
-        this.needSupplies = new Semaphore(1, true);
+        this.needSupplies = new Semaphore(0, true);
 
     }
 

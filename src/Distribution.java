@@ -54,9 +54,11 @@ public class Distribution {
         } else {
             System.out.println("Running forever:");
         }
+        short threadID = 0;
 
         Docks docks = new Docks();
-        Foreman foreman = new Foreman(docks);
+
+        Foreman foreman = new Foreman(threadID++, docks);
 
         int numResources = Supplies.values().length;
         int totalThreads = numResources * 2 + 1;
@@ -69,10 +71,9 @@ public class Distribution {
             Supplies ownedSupply = resources.get(i);
 
             resources.remove(i);
-            System.out.println();
 
-            threads.add(new Thread(new Miner(ownedSupply, docks)));
-            threads.add(new Thread(new Messenger(resources, ownedSupply, docks)));
+            threads.add(new Thread(new Miner(threadID++, ownedSupply, docks)));
+            threads.add(new Thread(new Messenger(threadID++, resources, ownedSupply, docks)));
         }
 
         //Start in a random order, because testing
@@ -89,7 +90,9 @@ public class Distribution {
         boolean notFinished = true;
         try {
             while(runForever || notFinished) {
-                Thread.sleep(timeout * 1000);
+//                Thread.sleep(timeout * 1000);
+                Thread.sleep(500);
+
                 notFinished = false;
             }
         } catch (InterruptedException ie) {
