@@ -6,6 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Miner implements Runnable {
 
+    private static int BOUND = Integer.getInteger("miner.bound", 1000);
+
     private short id;
 
     private Docks dock;
@@ -19,37 +21,27 @@ public class Miner implements Runnable {
     }
 
     public void run() {
-        while(!Thread.interrupted()){
-            makeSandwiches();
-            eatSandwiches();
+        try {
+            while (!Thread.interrupted()) {
+                makeSandwiches();
+                eatSandwiches();
+            }
+        } catch (InterruptedException e){
+            // just fall off, since we shouldn't return from a catch
         }
     }
 
-    private void makeSandwiches(){
+    private void makeSandwiches() throws InterruptedException {
         System.out.printf("The %s miners want to eat.\n", material);
 
-        try {
-            // sleep for 10s max
-
-            dock.needSupplies.release();
-            dock.messengers.get(material).acquire();
-//            Thread.sleep(ThreadLocalRandom.current().nextInt(10000));
-            Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
-        } catch (InterruptedException e){
-            // someone said stop, lets let the miners eat first.
-            Thread.currentThread().interrupt();
-        }
+        dock.needSupplies.release();
+        dock.messengers.get(material).acquire();
+        Thread.sleep(ThreadLocalRandom.current().nextInt(BOUND));
     }
 
-    private void eatSandwiches() {
+    private void eatSandwiches() throws InterruptedException {
         System.out.printf("The %s miners are eating. Om nom nom.\n", material);
-
-        try {
-            // sleep for 10s max
-            Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
-        } catch (InterruptedException e){
-            //someone said stop, I say no
-        }
+        Thread.sleep(ThreadLocalRandom.current().nextInt(BOUND));
     }
 
 

@@ -31,7 +31,8 @@ public class Foreman implements Runnable {
             try {
                 dock.needSupplies.acquire();
             } catch (InterruptedException ie) {
-
+                // if we interrupted, die
+                return;
             }
 
             // Get supplies
@@ -39,34 +40,16 @@ public class Foreman implements Runnable {
             int type1Index = threadRng.nextInt(types.length);
             // start at index 1, then go a random amount around in a loop, without making a full
             // loop
-            int type2Index = (type1Index + threadRng.nextInt(types.length - 2) + 1) % types.length;
+            int type2Index = (type1Index + threadRng.nextInt(types.length - 1) + 1) % types.length;
 
-            System.out.printf("1Dropping %s\n", types[type1Index]);
             Supplies type1 = types[type1Index];
-
-            System.out.printf("2Dropping %s\n", types[type2Index]);
             Supplies type2 = types[type2Index];
-            System.out.printf("Bread available at docks:   " + dock.isAvailable.get(Supplies.BREAD).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("Bologna available at docks: " + dock.isAvailable.get(Supplies.BOLOGNA).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("Cheese available at docks:  " + dock.isAvailable.get(Supplies.CHEESE).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("Resources to Bread Miners:    " + dock.messengers.get(Supplies.BREAD).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("Resources to Bologna Miners:  " + dock.messengers.get(Supplies.BOLOGNA).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("Resources to Cheese Miners:   " + dock.messengers.get(Supplies.CHEESE).toString().split("\\[|]")[1] + "\n");
-            System.out.printf("State of Need Resources:   " + dock.needSupplies.toString().split("\\[|]")[1] + "\n");
 
-            try {
-                Thread.sleep(100);
-            }catch(InterruptedException ie) {
-                //
-            }
+            System.out.printf("The foreman is dropping %s and %s.\n", type1, type2);
 
             // Make resources available at the docks
-//            try {
-                dock.isAvailable.get(type1).release();
-                dock.isAvailable.get(type2).release();
-//            } catch (InterruptedException ie) {
-//
-//            }
+            dock.isAvailable.get(type1).release();
+            dock.isAvailable.get(type2).release();
         }
 
 

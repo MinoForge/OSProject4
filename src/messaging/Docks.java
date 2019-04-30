@@ -7,9 +7,9 @@ import java.util.concurrent.Semaphore;
 
 public class Docks {
 
-    public Map<Supplies, Semaphore> isAvailable;
+    public final Map<Supplies, Semaphore> isAvailable;
 
-    public Map<Supplies, Semaphore> messengers;
+    public final Map<Supplies, Semaphore> messengers;
 
     public Semaphore needSupplies;
 

@@ -68,9 +68,7 @@ public class Distribution {
 
         for(int i = 0; i < numResources; i++) {
             List<Supplies> resources = new ArrayList<>(Arrays.asList(Supplies.values()));
-            Supplies ownedSupply = resources.get(i);
-
-            resources.remove(i);
+            Supplies ownedSupply = resources.remove(i);
 
             threads.add(new Thread(new Miner(threadID++, ownedSupply, docks)));
             threads.add(new Thread(new Messenger(threadID++, resources, ownedSupply, docks)));
@@ -87,24 +85,26 @@ public class Distribution {
             }
         }
 
-        boolean notFinished = true;
         try {
-            while(runForever || notFinished) {
-//                Thread.sleep(timeout * 1000);
-                Thread.sleep(500);
-
-                notFinished = false;
-            }
+            do{
+                Thread.sleep(timeout * 1000);
+            } while(runForever);
         } catch (InterruptedException ie) {
             //Do nothing, since we're just gonna end the program anyways
         }
 
         // TODO: 4/29/2019 THREAD CLEANUP?
-        for(int i = 0; i < totalThreads; i++) {
-            threads.get(i).interrupt();
+        for(Thread t : threads) {
+            t.interrupt();
         }
 
-
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch(InterruptedException e) {
+                // it went wrong while waiting for it to finish, it'll probably finish soon anyway
+            }
+        }
 
     }
 
