@@ -76,10 +76,12 @@ public class Messenger implements Runnable {
                             required.get(count % required.size()));
 
                 //Is my second resource available? Check and continue.
-                if (dock.isAvailable.get(required.get((count + 1) % required.size())).tryAcquire()) {
+                if (dock.isAvailable.get(required.get((count + 1) % required.size())).tryAcquire()){
                     //Take the resources
-                    System.out.printf("%s messenger has obtained resource %s and %s.\n", ready,
-                            required.get(count % required.size()), required.get((count + 1) % required.size()));
+                    System.out.printf("%s messenger has obtained resource %s and %s.\n",
+                            ready,
+                            required.get(count % required.size()),
+                            required.get((count + 1) % required.size()));
                     //Let the miner know that their resources are delivered.
                     resources.release();
                     count = 0;

@@ -23,6 +23,7 @@ public class SyncronizedPrintStream extends PrintStream {
     @Override
     public synchronized void println(String x) {
         super.println(x);
+        flush();
     }
 
     /**
@@ -31,6 +32,7 @@ public class SyncronizedPrintStream extends PrintStream {
     @Override
     public synchronized void print(String s) {
         super.print(s);
+        flush();
     }
 
     @Override
@@ -52,6 +54,7 @@ public class SyncronizedPrintStream extends PrintStream {
     @Override
     public synchronized void write(byte[] buf, int off, int len) {
         super.write(buf, off, len);
+        flush();
     }
 
     /**

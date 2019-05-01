@@ -27,5 +27,3 @@ The following options are available for this program:
 | messenger.show_attempts | false         | Determines whether to log all attempts to acquire resources, rather than just successful ones. |
 | miner.bound             | 10000         | The maximum wait time for making and eating sandwiches.                                        |
 | miner.hide_status       | false         | Determines whether to suppress messages stating that miners are ready to eat or are eating.    |
-
-#
