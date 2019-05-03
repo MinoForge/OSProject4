@@ -5,15 +5,21 @@ import messaging.Docks;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * A class representing the food miners.
+ * A class representing the food miners. Waits on supplies from the docks, and once collected,
+ * signals the foreman to deliver more and starts making and eating the sandwiches for a small
+ * random amount of time before getting hungry again.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
 public class Miner implements Runnable {
 
     /**
      * The upper bound on how long a miner can wait while making or eating sandwiches. Default
-     * 10,000 ms.
+     * 2000 ms.
      */
-    private static final int BOUND = Integer.getInteger("miner.bound", 10000);
+    private static final int BOUND = Integer.getInteger("miner.bound", 2000);
 
     /**
      * Whether or not to show the status of the miners. Default true.

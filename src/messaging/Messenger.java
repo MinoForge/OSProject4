@@ -6,7 +6,14 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * A class representing the messengers delivering supplies.
+ * A class representing the messengers delivering supplies. Waits for supplies to be delivered to
+ * the docks, then wakes up and attempts to acquire them. If both are not available, it switches
+ * which supply it is waiting on and goes back to sleep. This guarantees that messengers will not
+ * livelock acquiring and releasing the same material over and over.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
 public class Messenger implements Runnable {
 
@@ -71,7 +78,7 @@ public class Messenger implements Runnable {
                 //Is my first resource available? Wait until it is.
                 dock.isAvailable.get(required.get(count % required.size())).acquire();
 
-                if(SHOW_ATTEMPTS)
+                if(SHOW_ATTEMPTS) //Debug
                     System.out.printf("%s messenger has obtained resource %s.\n", ready,
                             required.get(count % required.size()));
 
@@ -90,8 +97,9 @@ public class Messenger implements Runnable {
                         System.out.printf("%s messenger releasing materials back to docks.\n",
                                 ready);
 
+
                     dock.isAvailable.get(required.get(count % required.size())).release();
-                    count = (count + 1);
+                    count = (count + 1); //Switch which resource I am sleeping on.
                 }
             } catch(InterruptedException ie) {
                 return; // stop trying since someone told us to stop

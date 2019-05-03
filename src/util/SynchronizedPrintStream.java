@@ -6,14 +6,18 @@ import java.io.PrintStream;
 /**
  * A (partially) synchronized version of a PrintStream. The HotSpot JVM implementation
  * does this by default, but for safety across systems we must add extra synchronization.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
-public class SyncronizedPrintStream extends PrintStream {
+public class SynchronizedPrintStream extends PrintStream {
 
     /**
      * Creates a synchronized wrapper print stream around the given output stream
      * @param out the stream
      */
-    public SyncronizedPrintStream(OutputStream out) {
+    public SynchronizedPrintStream(OutputStream out) {
         super(out);
     }
 

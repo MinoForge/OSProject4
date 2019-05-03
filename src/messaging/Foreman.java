@@ -6,7 +6,11 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * The foreman of the simulation
+ * The foreman of the simulation. Delivers supplies to the docks whenever a miner collects them.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
 public class Foreman implements Runnable {
 
@@ -41,12 +45,6 @@ public class Foreman implements Runnable {
      */
     @Override
     public void run() {
-        /* TODO: 
-         * Pick two supplies randomly, the two supplies will always be different from each other.
-         * Signal the 'docks' indicating supplies are ready for EACH type of supply chosen.
-         * messaging.Foreman will NOT send any more supplies of any kind until the two picked have been
-         * consumed.
-         */
         while(!Thread.interrupted()) {
             try {
                 dock.needSupplies.acquire();
@@ -74,7 +72,5 @@ public class Foreman implements Runnable {
 
 
     }
-
-    // TODO: Write any ather methods needed.
 }
 

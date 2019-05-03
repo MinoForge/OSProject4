@@ -2,6 +2,10 @@ package mining;
 
 /**
  * An enum representing the supplies.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
 public enum Supplies {
     BREAD("Bread"),

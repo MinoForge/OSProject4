@@ -3,7 +3,7 @@ import messaging.Foreman;
 import messaging.Messenger;
 import mining.Miner;
 import mining.Supplies;
-import util.SyncronizedPrintStream;
+import util.SynchronizedPrintStream;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * The Entry point for the project
+ * The Entry point for the project. Parses command-line arguments and starts threads.
+ *
+ * @author Peter Gardner
+ * @author Wesley Rogers
+ * @version May 3, 2019
  */
 public class Distribution {
 
@@ -148,7 +152,7 @@ public class Distribution {
 
         // Using an AOP framework is the correct way to do this,
         // but I'm not about to add that dependency.
-        System.setOut(new SyncronizedPrintStream(System.out));
+        System.setOut(new SynchronizedPrintStream(System.out)); //Make printing out synchronized
 
         new Distribution().go(timeout);
         System.exit(0);
